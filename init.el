@@ -1,6 +1,7 @@
-
+(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 ;; From: https://sam217pa.github.io/2016/09/02/how-to-build-your-own-spacemacs/
-(menu-bar-mode -1)
 (setq delete-old-versions -1 )		; delete excess backup versions silently
 (setq version-control t )		; use version control
 (setq vc-make-backup-files t )		; make backups file even when in version controlled dir
@@ -13,7 +14,7 @@
 (setq coding-system-for-write 'utf-8 )
 (setq sentence-end-double-space nil)	; sentence SHOULD end with only a point.
 (setq default-fill-column 80)		; toggle wrapping text at the 80th character
-(setq initial-scratch-message "Welcome in Emacs") ; print a default message in the empty scratch buffer opened at startup
+(setq initial-scratch-message "Welcome in Emacs, you're on ownemacs") ; print a default message in the empty scratch buffer opened at startup
 
 ;; packages
 (require 'package)
@@ -32,7 +33,20 @@
 (use-package ivy :ensure t)
 (use-package ranger :ensure t)
 (use-package which-key :ensure t)
+(use-package magit :ensure t)
+(use-package projectile :ensure t
+  :init
+  (setq projectile-keymap-prefix "SPC p"))
+(use-package counsel-projectile :ensure t)
 (which-key-mode)
+(use-package rainbow-delimiters :ensure t
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+(use-package smartparens :ensure t
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
+  :config
+  (require 'smartparens-config))
 
 (general-define-key
  "C-s" 'swiper
@@ -41,8 +55,8 @@
  "f" '(:ignore t :which-key "files")
  "ff" 'counsel-find-file
  "fr" 'counsel-recentf
- "p" '(:ignore t :which-key "project")
- "pf" '(counsel-git :which-key "find file in git dir")
+; "p" '(:ignore t :which-key "project")
+ ;"pf" '(counsel-git :which-key "find file in git dir")
  )
 
 
@@ -63,7 +77,13 @@
    "ff" 'counsel-find-file
    "fr" 'counsel-recentf
    "p" '(:ignore t :which-key "project")
-   "pf" '(counsel-git :which-key "find file in git dir")
+   "pf" '(counsel-projectile-find-file :which-key "find a project file")
+   "pd" '(counsel-projectile-find-dir :which-key "find a project directory")
+   "pb" 'counsel-projectile-switch-to-buffer
+   "s" 'swiper
+   "m" 'menu-bar-mode
+   "g" '(:ignore t :which-key "magit")
+   "gs" 'magit-status
  
    "a" '(:ignore t :which-key "Applications")
    "ar" 'ranger
