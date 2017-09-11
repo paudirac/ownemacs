@@ -1,44 +1,84 @@
+;; remove visual clutter
 (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-;; From: https://sam217pa.github.io/2016/09/02/how-to-build-your-own-spacemacs/
-(setq delete-old-versions -1 )		; delete excess backup versions silently
-(setq version-control t )		; use version control
-(setq vc-make-backup-files t )		; make backups file even when in version controlled dir
-(setq backup-directory-alist `(("." . "~/.emacs.d/backups")) ) ; which directory to put backups file
-(setq vc-follow-symlinks t )				       ; don't ask for confirmation when opening symlinked file
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ) ;transform backups file name
-(setq inhibit-startup-screen t )	; inhibit useless and old-school startup screen
-(setq ring-bell-function 'ignore )	; silent bell when you make a mistake
-(setq coding-system-for-read 'utf-8 )	; use utf-8 by default
-(setq coding-system-for-write 'utf-8 )
-(setq sentence-end-double-space nil)	; sentence SHOULD end with only a point.
-(setq default-fill-column 80)		; toggle wrapping text at the 80th character
-(setq initial-scratch-message "Welcome in Emacs, you're on ownemacs") ; print a default message in the empty scratch buffer opened at startup
 
-;; packages
+;; sensible defaults
+(setq inhibit-startup-screen t)
+(setq ring-bell-function 'ignore)
+(setq coding-system-for-read 'utf-8
+      coding-system-for-write 'utf-8)
+
+;; writting
+(setq sentence-end-double-space nil)
+(setq default-fill-column 80)
+
+;; backups
+;;   delete excess backup versions silently
+;;   use version control
+;;   make backups file even when in version controlled dir
+;;   which directory to put backups file
+;;   don't ask for confirmation when opening symlinked file
+;;   transform backups file name
+(setq delete-old-versions t  
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t      
+      vc-make-backup-files t 
+      backup-directory-alist `(("." . "~/.emacs.d/backups")) 
+      vc-follow-symlinks t 
+      auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t))) 
+
+(setq initial-scratch-message
+      ";; A few years ago, while visiting or, rather, rummaging about Emacs, 
+;; the author of this config found, in an obscure nook of one of the 
+;; infinite blogs, the following code, engraved by hand upon the startup 
+;; screen:
+;;
+;;        CODE
+;;
+;; These ASCII capitals, black with age, and quite deeply graven in the virtual 
+;; stone, with I know not what signs peculiar to Terminal caligraphy imprinted 
+;; upon their forms and upon their attitudes, as though with the purpose of 
+;; revealing that it had been a hand of the 70s which had inscribed them there,
+;; and especially the fatal and melancholy meaning contained in them, struck 
+;; the author deeply.
+;; He questioned himself; he sought to divine who could have been that soul in 
+;; torment which had not been willing to quit this world without leaving this 
+;; stigma of crime or unhappiness upon the brow of the ancient editor.
+;;
+;; It is upon this word that this config is founded.
+;; September, 2017.") 
+
+;; packages via package & use-package
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("org" . "http://orgmode.org/elpa/")
-			 ("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-			 ("marmalade" . "https://marmalade-repo.org/packages/")))
+(setq package-archives
+      '(("org" . "http://orgmode.org/elpa/")
+	("gnu" . "http://elpa.gnu.org/packages/")
+	("melpa" . "https://melpa.org/packages/")
+	("marmalade" . "https://marmalade-repo.org/packages/")))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+
+
+;; my own emacs experimenting starts here
+;; packages
 (use-package evil :ensure t)
 (evil-mode)
 (use-package ivy :ensure t)
-(use-package ranger :ensure t)
+(ivy-mode 1)
+;(use-package ranger :ensure t)
 (use-package which-key :ensure t)
+(which-key-mode)
 (use-package magit :ensure t)
 (use-package projectile :ensure t
   :init
   (setq projectile-keymap-prefix "SPC p"))
 (use-package counsel-projectile :ensure t)
-(which-key-mode)
 (use-package rainbow-delimiters :ensure t
   :init
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
@@ -48,6 +88,7 @@
   :config
   (require 'smartparens-config))
 
+;; key bindingss
 (general-define-key
  "C-s" 'swiper
  "M-s" 'counsel-M-x
@@ -55,10 +96,7 @@
  "f" '(:ignore t :which-key "files")
  "ff" 'counsel-find-file
  "fr" 'counsel-recentf
-; "p" '(:ignore t :which-key "project")
- ;"pf" '(counsel-git :which-key "find file in git dir")
  )
-
 
 (use-package general :ensure t
   :config
@@ -88,18 +126,8 @@
    "a" '(:ignore t :which-key "Applications")
    "ar" 'ranger
    "ad" 'dired))
-(ivy-mode 1)
 
-;; custom, generated by Emacs itself
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (which-key counsel avy general use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; theme
+(use-package zenburn-theme :ensure t
+  :config
+  (load-theme 'zenburn :no-confirm t))
