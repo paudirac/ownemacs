@@ -81,10 +81,10 @@
 (use-package counsel-projectile :ensure t)
 (use-package rainbow-delimiters :ensure t
   :init
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 (use-package smartparens :ensure t
   :init
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
+  (add-hook 'racket-mode-hook 'smartparens-mode)
   :config
   (require 'smartparens-config)
   (turn-on-show-smartparens-mode))
@@ -92,6 +92,10 @@
   :config
   (smartparens-mode t)
   (message "running racket mode"))
+(use-package paredit :ensure t)
+(use-package evil-paredit :ensure t
+  :init
+  (add-hook 'racket-mode-hook 'evil-paredit-mode))
 
 ;; key bindingss
 (general-define-key
@@ -116,21 +120,30 @@
    "TAB" '(switch-to-other-buffer :which-key "prev buffer")
    "SPC" '(avy-goto-word-or-subword-1 :which "go to char")
    "b" 'ivy-switch-buffer
+
    "f" '(:ignore t :which-key "files")
    "ff" 'counsel-find-file
    "fr" 'counsel-recentf
+
    "p" '(:ignore t :which-key "project")
    "pf" '(counsel-projectile-find-file :which-key "find a project file")
    "pd" '(counsel-projectile-find-dir :which-key "find a project directory")
    "pb" 'counsel-projectile-switch-to-buffer
+
    "s" 'swiper
    "m" 'menu-bar-mode
+
    "g" '(:ignore t :which-key "magit")
    "gs" 'magit-status
+
+   "k" '(:ignore t :which-key "paredit")
+   "kb" 'paredit-forward-barf-sexp
+   "ks" 'paredit-forward-slurp-sexp
  
    "a" '(:ignore t :which-key "Applications")
    "ar" 'ranger
    "ad" 'dired))
+
 
 ;; theme
 (use-package zenburn-theme :ensure t
