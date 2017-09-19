@@ -86,7 +86,12 @@
   :init
   (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
   :config
-  (require 'smartparens-config))
+  (require 'smartparens-config)
+  (turn-on-show-smartparens-mode))
+(use-package racket-mode :ensure t
+  :config
+  (smartparens-mode t)
+  (message "running racket mode"))
 
 ;; key bindingss
 (general-define-key
@@ -131,3 +136,17 @@
 (use-package zenburn-theme :ensure t
   :config
   (load-theme 'zenburn :no-confirm t))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (zenburn-theme which-key use-package smartparens ranger rainbow-delimiters magit general evil counsel-projectile avy anti-zenburn-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
