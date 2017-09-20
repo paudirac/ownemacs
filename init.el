@@ -8,6 +8,7 @@
 (setq ring-bell-function 'ignore)
 (setq coding-system-for-read 'utf-8
       coding-system-for-write 'utf-8)
+(show-paren-mode 1)
 
 ;; writting
 (setq sentence-end-double-space nil)
@@ -81,7 +82,8 @@
 (use-package counsel-projectile :ensure t)
 (use-package rainbow-delimiters :ensure t
   :init
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'racket-mode-hook 'rainbow-delimiters-mode))
 (use-package smartparens :ensure t
   :init
   (add-hook 'racket-mode-hook 'smartparens-mode)
